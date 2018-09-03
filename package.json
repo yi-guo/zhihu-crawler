@@ -1,0 +1,29 @@
+{
+  "name": "zhihu-crawler",
+  "version": "1.0.0",
+  "description": "Image crawler for zhihu.com",
+  "main": "index.js",
+  "author": "Yi Guo <yiguocu@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "babel-node src/index.js",
+    "format": "prettier --config .prettierrc --write src/*"
+  },
+  "dependencies": {
+    "ascii-progress": "^1.0.5",
+    "idx": "^2.4.0",
+    "invariant": "^2.2.4",
+    "jsdom": "^12.0.0",
+    "node-fetch": "^2.2.0",
+    "promise-limit": "^2.7.0",
+    "urijs": "^1.19.1",
+    "yargs": "^12.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@babel/node": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
+    "flow-bin": "^0.79.1",
+    "prettier": "^1.14.2"
+  }
+}
