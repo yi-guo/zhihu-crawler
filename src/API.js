@@ -5,13 +5,13 @@
 
 'use strict';
 
+const args = require('./args');
 const fetch = require('node-fetch');
 const fs = require('fs');
+const path = require('path');
 const promiseLimit = require('promise-limit');
 const URI = require('urijs');
 
-const MAX_ATTEMPTS = 5;
-const MAX_CONCURRENCY = 20;
 const BASE_URI = 'https://www.zhihu.com/api/v4';
 const REQUEST_OPTIONS = {
   method: 'GET',
@@ -22,7 +22,7 @@ const REQUEST_OPTIONS = {
   },
 };
 
-const limit = promiseLimit(MAX_CONCURRENCY);
+const limit = promiseLimit(args.maxConcurrency);
 
 async function get(path: string, query?: Object): Promise<Object> {
   const uri = URI(BASE_URI)
@@ -35,12 +35,11 @@ async function get(path: string, query?: Object): Promise<Object> {
 }
 
 async function download(uri: string, callback?: () => void): Promise<void> {
-  const directory = 'output';
-  if (!fs.existsSync(directory)) {
-    fs.mkdirSync(directory);
+  if (!fs.existsSync(args.output)) {
+    fs.mkdirSync(args.output);
   }
 
-  const filePath = directory + URI.parse(uri).path;
+  const filePath = path.join(args.output, URI.parse(uri).path);
   if (fs.existsSync(filePath)) {
     callback && callback();
     return;
@@ -60,15 +59,15 @@ async function download(uri: string, callback?: () => void): Promise<void> {
 async function _fetchWithRetry<T>(
   uri: string,
   options: Object,
-  attempt: number = 0,
+  attempt: number = 1,
 ): Promise<T> {
   try {
     return await fetch(uri, options);
   } catch (e) {
-    if (++attempt > MAX_ATTEMPTS) {
+    if (attempt++ > args.maxAttempts) {
       throw e;
     }
-    console.log(`Retry ${attempt}/${MAX_ATTEMPTS}: ${uri}`);
+    console.log(`Retry ${attempt}/${args.maxAttempts}: ${uri}`);
     return await _fetchWithRetry(uri, options, attempt);
   }
 }

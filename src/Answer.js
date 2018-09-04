@@ -20,7 +20,6 @@ class Answer {
   _disableProgressBar: boolean;
 
   constructor(id: number, disableProgressBar: boolean = false) {
-    invariant(id > 0, `Malformed id: expected<number>, received<${id}>`);
     this._id = id;
     this._disableProgressBar;
   }

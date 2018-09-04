@@ -19,7 +19,6 @@ class Question {
   _progressBar: ProgressBar;
 
   constructor(id: number, maxAnswers?: number) {
-    invariant(id > 0, `Malformed id: expected<number>. received<${id}>`);
     this._id = id;
     this._maxAnswers =
       maxAnswers && maxAnswers > 0 ? maxAnswers : Number.MAX_SAFE_INTEGER;
