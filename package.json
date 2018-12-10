@@ -20,9 +20,8 @@
     "yargs": "^12.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/node": "^7.0.0",
-    "@babel/preset-flow": "^7.0.0",
+    "babel-cli": "^6.26.0",
+    "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.79.1",
     "prettier": "^1.14.2"
   }
