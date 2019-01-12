@@ -83,12 +83,12 @@ class API {
   }
 
   _populateOutputPath(): string {
-    let output = args.output || `output_${args.id}`;
-    if (fs.existsSync(output)) {
-      return fs.mkdtempSync(output);
+    let outputPath = path.resolve(args.output || `output_${args.id}`);
+    if (fs.existsSync(outputPath)) {
+      return fs.mkdtempSync(`${outputPath}_`);
     }
-    fs.mkdirSync(output);
-    return output;
+    fs.mkdirSync(outputPath);
+    return outputPath;
   }
 }
 
