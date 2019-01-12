@@ -3,8 +3,8 @@
  * @flow
  */
 
-const args = require('./args');
 const Answer = require('./Answer');
+const args = require('./args');
 const idx = require('idx');
 const invariant = require('invariant');
 const Question = require('./Question');

@@ -34,8 +34,6 @@ const args = yargs
   .option('output', {
     alias: 'o',
     type: 'string',
-    demandOption: true,
-    requiresArg: true,
     coerce: path.resolve,
     describe: 'Path of a directory to store the crawled images',
   })

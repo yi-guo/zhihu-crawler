@@ -6,7 +6,7 @@
 'use strict';
 
 const Answer = require('./Answer');
-const {get} = require('./API');
+const API = require('./API');
 const idx = require('idx');
 const invariant = require('invariant');
 const ProgressBar = require('ascii-progress');
@@ -36,7 +36,7 @@ class Question {
   async _populateAnswers(): Promise<Set<Answer>> {
     const answers = new Set();
     const path = `/questions/${this._id}/answers`;
-    const {paging} = await get(path);
+    const {paging} = await API.get(path);
 
     invariant(
       paging.totals >= 0,
@@ -55,7 +55,7 @@ class Question {
 
     for (let offset = 0; offset < total; offset += LIMIT) {
       promises.push(
-        get(path, {
+        API.get(path, {
           limit: Math.min(LIMIT, total - offset),
           offset: offset,
         }),

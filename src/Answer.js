@@ -5,7 +5,7 @@
 
 'use strict';
 
-const {get, download} = require('./API');
+const API = require('./API');
 const idx = require('idx');
 const invariant = require('invariant');
 const {JSDOM} = require('jsdom');
@@ -25,7 +25,7 @@ class Answer {
   }
 
   async downloadImages(callback?: () => void): Promise<void> {
-    const {content} = await get(`/answers/${this._id}`, {
+    const {content} = await API.get(`/answers/${this._id}`, {
       include: 'data[*].content',
     });
 
@@ -54,7 +54,7 @@ class Answer {
 
     for (let i = 0; i < images.length; i++) {
       promises.push(
-        download(this._getImageURI(images[i]), () => {
+        API.download(this._getImageURI(images[i]), () => {
           progressBar && progressBar.tick();
         }),
       );
