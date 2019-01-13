@@ -13,13 +13,13 @@ const Question = require('./Question');
 function main(): void {
   const {id, maxAnswers} = args;
   const command = idx(args, _ => _._[0]);
-  console.log(`Output: ${API.getOutputPath()}`);
+  const onComplete = () => console.log(API.getOutputSummary());
   switch (command) {
     case 'question':
-      (new Question(id, maxAnswers)).downloadImages();
+      new Question(id, maxAnswers).downloadImages(onComplete);
       break;
     case 'answer':
-      (new Answer(id)).downloadImages();
+      new Answer(id).downloadImages(onComplete);
       break;
     default:
       invariant(false, 'Unrecognized command');

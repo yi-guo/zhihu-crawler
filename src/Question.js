@@ -24,13 +24,14 @@ class Question {
       maxAnswers && maxAnswers > 0 ? maxAnswers : Number.MAX_SAFE_INTEGER;
   }
 
-  async downloadImages(): Promise<void> {
+  async downloadImages(callback?: () => void): Promise<void> {
     const promises = [];
     const answers = await this._populateAnswers();
     answers.forEach(answer =>
       promises.push(answer.downloadImages(() => this._progressBar.tick())),
     );
     await Promise.all(promises);
+    callback && callback();
   }
 
   async _populateAnswers(): Promise<Set<Answer>> {

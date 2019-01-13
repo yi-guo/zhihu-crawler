@@ -62,8 +62,9 @@ class API {
     });
   }
 
-  getOutputPath(): string {
-    return this._outputPath;
+  getOutputSummary(): string {
+    const outputDir = fs.readdirSync(this._outputPath);
+    return `=> Downloaded ${outputDir.length} images to ${this._outputPath}`;
   }
 
   async _fetchWithRetry<T>(
@@ -84,11 +85,15 @@ class API {
 
   _populateOutputPath(): string {
     let outputPath = path.resolve(args.output || `output_${args.id}`);
-    if (fs.existsSync(outputPath)) {
-      return fs.mkdtempSync(`${outputPath}_`);
+
+    if (!fs.existsSync(outputPath)) {
+      fs.mkdirSync(outputPath);
+      return outputPath;
     }
-    fs.mkdirSync(outputPath);
-    return outputPath;
+
+    return fs.readdirSync(outputPath).length > 0
+      ? fs.mkdtempSync(`${outputPath}_`)
+      : outputPath;
   }
 }
 
