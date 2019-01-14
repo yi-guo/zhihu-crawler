@@ -21,7 +21,7 @@ const args = yargs
         })
         .option('max-answers', {
           type: 'number',
-          default: '0',
+          default: 0,
           describe:
             'Maximum number of Zhihu answers to crawl. Useful for popular ' +
             'Zhihu questions that may have thousands of answers. Crawl ' +
@@ -54,14 +54,23 @@ const args = yargs
       argv._.length < 2,
       `Unrecognized argument(s): ${argv._.slice(1).join(', ')}`,
     );
-    ['id', 'max-answers', 'max-concurrency', 'max-attempts'].forEach(key => {
-      invariant(
-        !isNaN(argv[key]) && argv[key] >= 0,
-        `Invalid ${key}: ${key} must be a positive integer`,
-      );
-    });
+    ['id', 'max-concurrency', 'max-attempts'].forEach(key =>
+      assertNonNegativeInteger(key, argv[key]),
+    );
+    if (argv._[0] === 'question') {
+      const key = 'max-answers';
+      assertNonNegativeInteger(key, argv[key]);
+    }
     return true;
   })
   .help().argv;
+
+function assertNonNegativeInteger(label: string, value: any): void {
+  const valueInt = parseInt(value);
+  invariant(
+    !isNaN(valueInt) && valueInt >= 0,
+    `Invalid ${label}: ${value} must be a positive integer`,
+  );
+}
 
 module.exports = args;
