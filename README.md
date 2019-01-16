@@ -1,28 +1,29 @@
 # zhihu-crawler
 
-A web crawler for https://www.zhihu.com.
+A web crawler for https://www.zhihu.com that crawls and downloads all of the images in the specified Zhihu question or answer.
 
-A Zhihu question consists a number of Zhihu answers, and an answer may have pictures as part of its content. This crawler with a Zhihu question ID or an answer ID will crawl and download all of the pictures that reside in its answers, or the answer itself, respectively, to the specified location.
-
-To run, you need
+System Requirements
 - `node.js`
 - `yarn`
 
-1) Install all of the dependencies with the following inside the root of the respository.
+If you have the above requirements and wish to run this script directly, follow the guidence below to get started. Alternatively, if you prefer `docker`, check out https://hub.docker.com/r/yiguo/zhihu-crawler.
+
+1) Install dependencies
 ```
 $ yarn install
 ```
-2) Start by
+2) Run the script
 ```
-$ yarn start <question|answer> <question_id|answer_id> --output <output_path>
+$ yarn start <question|answer> <question_id|answer_id> [--output <output_path>]
 ```
 
-For example, if you are at https://www.zhihu.com/question/12345/answer/67890, then `12345` is your question ID, and `67890` is your answer ID.
+You may find the question and answer ID in the URL. For example, if you are at https://www.zhihu.com/question/12345/answer/67890, then `12345` is your question ID, and `67890` is your answer ID.
 
-Note that answers and images will be crawled concurrently, and automatically retried upon failure. If you'd like to control the maximum concurrency and attempts, you add `--max-concurrency` and `--max-attempts` to the above command.
+By default, a directory named `output_<question_id|answer_id>` will be created to hold the images to be downloaded. In the occasion of conflict, a few random characters will be appended in the end. You may also choose to control the download location by using the `--output` parameter.
+
+Note that images will be crawled and downloaded concurrently and retried automatically upon failure. If you'd like to control the maximum concurrency and retries, you may specify `--max-concurrency` and `--max-attempts` as part of the above command.
 
 To learn more about what you can do, simply invoke
 ```
 $ yarn start --help
 ```
-at any time.
