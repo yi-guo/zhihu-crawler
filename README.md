@@ -21,7 +21,7 @@ You may find the question and answer ID in the URL. For example, if you are at h
 
 By default, a directory named `output_<question_id|answer_id>` will be created to hold the images to be downloaded. In the occasion of conflict, a few random characters will be appended in the end. You may also choose to control the download location by using the `--output` parameter.
 
-Note that images will be crawled and downloaded concurrently and retried automatically upon failure. If you'd like to control the maximum concurrency and retries, you may specify `--max-concurrency` and `--max-attempts` as part of the above command.
+Note that images will be crawled and downloaded concurrently and retried automatically upon failure. If you'd like to control the maximum concurrency and retries, you may append `--max-concurrency` and `--max-attempts` to the end of the above command.
 
 To learn more about what you can do, simply invoke
 ```
