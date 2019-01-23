@@ -29,13 +29,14 @@ class Answer {
       include: 'data[*].content',
     });
 
-    invariant(
-      typeof content === 'string',
-      `Malformed content: expected<string>, received<${content}>`,
-    );
+    if (typeof content !== 'string') {
+      callback && callback();
+      return;
+    }
+
     const images = idx(new JSDOM(content), _ => _.window.document.images);
 
-    if (!(images && images.length)) {
+    if (!(images && images.length > 0)) {
       callback && callback();
       return;
     }
