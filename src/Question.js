@@ -9,14 +9,14 @@ const Answer = require('./Answer');
 const API = require('./API');
 const idx = require('idx');
 const invariant = require('invariant');
-const ProgressBar = require('ascii-progress');
+const CliProgress = require('cli-progress');
 
 const LIMIT = 20;
 
 class Question {
   _id: number;
   _maxAnswers: number;
-  _progressBar: ProgressBar;
+  _progressBar: CliProgress.Bar;
 
   constructor(id: number, maxAnswers?: number) {
     this._id = id;
@@ -28,7 +28,7 @@ class Question {
     const promises = [];
     const answers = await this._populateAnswers();
     answers.forEach(answer =>
-      promises.push(answer.downloadImages(() => this._progressBar.tick())),
+      promises.push(answer.downloadImages(() => this._progressBar.increment())),
     );
     await Promise.all(promises);
     callback && callback();
@@ -46,13 +46,11 @@ class Question {
 
     const promises = [];
     const total = Math.min(paging.totals, this._maxAnswers);
-    this._progressBar = new ProgressBar({
-      schema: `Question<${
-        this._id
-      }>:.magenta .white:bar.green  :percent :current/:total :elapseds :etas`,
-      total: total,
-      blank: ' ',
+    this._progressBar = new CliProgress.Bar({
+      format: `Question<${this._id}>: [{bar}] {percentage}% {value}/{total} {duration_formatted}`,
+      stopOnComplete: true,
     });
+    this._progressBar.start(total, 0);
 
     for (let offset = 0; offset < total; offset += LIMIT) {
       promises.push(

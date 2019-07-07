@@ -9,7 +9,7 @@ const API = require('./API');
 const idx = require('idx');
 const invariant = require('invariant');
 const {JSDOM} = require('jsdom');
-const ProgressBar = require('ascii-progress');
+const CliProgress = require('cli-progress');
 
 const ATTRIBUTE_SRC = 'src';
 const ATTRIBUTE_DATA_ORIGINAL = 'data-original';
@@ -21,7 +21,7 @@ class Answer {
 
   constructor(id: number, disableProgressBar: boolean = false) {
     this._id = id;
-    this._disableProgressBar;
+    this._disableProgressBar = disableProgressBar;
   }
 
   async downloadImages(callback?: () => void): Promise<void> {
@@ -41,21 +41,20 @@ class Answer {
       return;
     }
 
-    const promises = [];
-    const progressBar =
-      this._disableProgressBar &&
-      new ProgressBar({
-        schema: `Answer<${
-          this._id
-        }>:.magenta .white:bar.green  :percent :current/:total :elapseds :etas`,
-        total: images.length,
-        blank: ' ',
+    let progressBar = null;
+    if (!this._disableProgressBar) {
+      progressBar = new CliProgress.Bar({
+        format: `Answer<${this._id}>: [{bar}] {percentage}% {value}/{total} {duration_formatted}`,
+        stopOnComplete: true,
       });
+      progressBar.start(images.length, 0);
+    }
 
+    const promises = [];
     for (let i = 0; i < images.length; i++) {
       promises.push(
         API.download(this._getImageURI(images[i]), () => {
-          progressBar && progressBar.tick();
+          progressBar && progressBar.increment();
         }),
       );
     }
