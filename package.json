@@ -13,7 +13,7 @@
     "cli-progress": "^2.1.1",
     "idx": "^2.4.0",
     "invariant": "^2.2.4",
-    "jsdom": "^12.0.0",
+    "jsdom": "^16.5.0",
     "node-fetch": "^2.2.0",
     "promise-limit": "^2.7.0",
     "urijs": "^1.19.1",
